@@ -10,7 +10,7 @@ CREATE TABLE "users" (
 CREATE TABLE "barbershop" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "adress" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
     "imageUrl" TEXT NOT NULL,
 
     CONSTRAINT "barbershop_pkey" PRIMARY KEY ("id")
@@ -21,6 +21,7 @@ CREATE TABLE "service" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "price" DECIMAL(10,2) NOT NULL,
+    "description" TEXT NOT NULL,
     "barbershopId" TEXT NOT NULL,
 
     CONSTRAINT "service_pkey" PRIMARY KEY ("id")
@@ -32,6 +33,7 @@ CREATE TABLE "booking" (
     "userId" TEXT NOT NULL,
     "serviceId" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
+    "status" TEXT NOT NULL,
     "barbershopId" TEXT NOT NULL,
 
     CONSTRAINT "booking_pkey" PRIMARY KEY ("id")
