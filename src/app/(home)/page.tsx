@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import { Header } from '@/components/header'
 import { ptBR } from 'date-fns/locale'
 import { InputSearch } from './components/input-search'
+import { BookingItem } from '@/components/booking-item'
 
 export default function Home() {
   return (
@@ -20,6 +21,13 @@ export default function Home() {
       </div>
 
       <InputSearch />
+
+      <div className="space-y-3">
+        <p className="text-xs font-bold uppercase dark:text-zinc-500">
+          Agendamentos
+        </p>
+        <BookingItem />
+      </div>
     </div>
   )
 }
