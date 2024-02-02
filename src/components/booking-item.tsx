@@ -7,9 +7,7 @@ export function BookingItem() {
     <Card>
       <CardContent className="flex pr-0">
         <div className="flex flex-1 flex-col gap-2 py-3">
-          <Badge className="w-fit border-none dark:bg-primary-600/20 dark:text-primary-400 dark:hover:bg-primary-600/20">
-            Confirmado
-          </Badge>
+          <Badge className="w-fit">Confirmado</Badge>
           <h2 className="mt-1 font-bold dark:text-zinc-50">Corte de cabelo</h2>
 
           <div className="flex items-center gap-2">
