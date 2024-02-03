@@ -25,6 +25,7 @@ model Barbershop {
   imageUrl String
   services Service[]
   bookings Booking[]
+  rating   Rating[]
 
   @@map("barbershop")
 }
@@ -34,6 +35,7 @@ model Service {
   name         String
   price        Decimal    @db.Decimal(10, 2)
   description  String
+  imageUrl     String
   barbershopId String
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
   Bookings     Booking[]
@@ -53,4 +55,13 @@ model Booking {
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
 
   @@map("booking")
+}
+
+model Rating {
+  id           String     @id @default(uuid())
+  value        Decimal    @db.Decimal(1, 1)
+  barbershopId String
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  @@map("rating")
 }

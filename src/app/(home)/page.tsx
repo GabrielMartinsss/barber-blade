@@ -11,7 +11,7 @@ export default async function Home() {
   const barbershops = await databasePrisma.barbershop.findMany()
 
   return (
-    <div className="space-y-6">
+    <div className="mb-10 space-y-6">
       <Header className="px-5" />
 
       <div className="px-5">
@@ -37,6 +37,22 @@ export default async function Home() {
       <div className="space-y-3">
         <p className="px-5 text-xs font-bold uppercase dark:text-zinc-500">
           Recomendados
+        </p>
+
+        <ScrollArea className="w-full pl-5">
+          <div className="flex w-max gap-4 pb-4">
+            {barbershops.map((barbershop) => (
+              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+            ))}
+          </div>
+
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
+
+      <div className="space-y-3">
+        <p className="px-5 text-xs font-bold uppercase dark:text-zinc-500">
+          Populares
         </p>
 
         <ScrollArea className="w-full pl-5">
