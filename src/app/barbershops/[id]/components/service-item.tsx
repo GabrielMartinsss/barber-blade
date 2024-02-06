@@ -1,13 +1,28 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Service } from '@prisma/client'
+import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 
 export interface ServiceItemProps {
   service: Service
+  isAuthenticated: boolean
 }
 
-export function ServiceItem({ service }: ServiceItemProps) {
+export function ServiceItem({
+  service,
+  isAuthenticated = false,
+}: ServiceItemProps) {
+  async function handleBookingClick() {
+    if (!isAuthenticated) {
+      return signIn('google')
+    }
+
+    // TODO: open modal of bookings
+  }
+
   return (
     <Card>
       <CardContent className="flex gap-3 p-3">
@@ -16,6 +31,7 @@ export function ServiceItem({ service }: ServiceItemProps) {
             src={service.imageUrl}
             alt={service.name}
             fill
+            sizes="6.875rem"
             style={{ objectFit: 'cover' }}
           />
         </div>
@@ -33,9 +49,11 @@ export function ServiceItem({ service }: ServiceItemProps) {
               {Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
-              }).format(service.price.toNumber())}
+              }).format(Number(service.price))}
             </span>
-            <Button variant="secondary">Reservar</Button>
+            <Button variant="secondary" onClick={handleBookingClick}>
+              Reservar
+            </Button>
           </div>
         </div>
       </CardContent>

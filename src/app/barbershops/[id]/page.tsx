@@ -4,6 +4,8 @@ import { databasePrisma } from '@/lib/prisma'
 import { Header } from './components/header'
 import { MapPin, Star } from 'lucide-react'
 import { ServiceItem } from './components/service-item'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 export interface BarbershopDetailPageProps {
   params: {
@@ -14,6 +16,9 @@ export interface BarbershopDetailPageProps {
 export default async function BarbershopDetailPage({
   params: { id },
 }: BarbershopDetailPageProps) {
+  const session = await getServerSession(authOptions)
+  const isAuthenticated = !!session?.user
+
   if (!id) {
     // TODO: this should redirect to home page
     return null
@@ -66,7 +71,11 @@ export default async function BarbershopDetailPage({
 
         <div className="flex flex-col gap-3">
           {barbershop.services.map((service) => (
-            <ServiceItem key={service.id} service={service} />
+            <ServiceItem
+              key={service.id}
+              service={service}
+              isAuthenticated={isAuthenticated}
+            />
           ))}
         </div>
       </section>
