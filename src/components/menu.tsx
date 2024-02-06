@@ -19,10 +19,10 @@ import {
 
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import Link from 'next/link'
 
 export function Menu() {
-  const session = useSession()
-  const isSignedIn = session.status === 'authenticated'
+  const { data, status } = useSession()
 
   async function handleLoginClick() {
     await signIn('google')
@@ -46,14 +46,14 @@ export function Menu() {
         </SheetHeader>
 
         <div className="flex flex-1 flex-col gap-6 px-5 py-6">
-          {isSignedIn ? (
+          {data?.user ? (
             <div className="flex flex-1 items-center justify-between">
               <div className="flex items-center gap-2">
                 <Avatar className="size-10">
-                  <AvatarFallback>{session.data?.user?.name[0]}</AvatarFallback>
-                  <AvatarImage src={session.data?.user?.image ?? ''} />
+                  <AvatarFallback>{data?.user?.name ?? ''}</AvatarFallback>
+                  <AvatarImage src={data?.user?.image ?? ''} />
                 </Avatar>
-                <h1 className="font-bold">{session.data?.user?.name}</h1>
+                <h1 className="font-bold">{data?.user?.name}</h1>
               </div>
               <Button
                 variant="secondary"
@@ -86,18 +86,27 @@ export function Menu() {
           <div className="space-y-3">
             <Button
               variant="outline"
+              asChild
               className="flex w-full items-center justify-start gap-2"
             >
-              <Home size={16} />
-              Início
+              <Link href="/">
+                <Home size={16} />
+                Início
+              </Link>
             </Button>
-            <Button
-              variant="outline"
-              className="flex w-full items-center justify-start gap-2"
-            >
-              <CalendarRange size={16} />
-              Agendamentos
-            </Button>
+
+            {status === 'authenticated' && (
+              <Button
+                variant="outline"
+                asChild
+                className="flex w-full items-center justify-start gap-2"
+              >
+                <Link href="/bookings">
+                  <CalendarRange size={16} />
+                  Agendamentos
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </SheetContent>
