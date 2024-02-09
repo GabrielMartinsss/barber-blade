@@ -1,28 +1,21 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Service } from '@prisma/client'
-import { signIn } from 'next-auth/react'
+import { Barbershop, Service } from '@prisma/client'
 import Image from 'next/image'
+import { SheetBooking } from './sheet-booking'
+import { Card, CardContent } from '@/components/ui/card'
 
 export interface ServiceItemProps {
+  barbershop: Barbershop
   service: Service
   isAuthenticated: boolean
 }
 
 export function ServiceItem({
+  barbershop,
   service,
   isAuthenticated = false,
 }: ServiceItemProps) {
-  async function handleBookingClick() {
-    if (!isAuthenticated) {
-      return signIn('google')
-    }
-
-    // TODO: open modal of bookings
-  }
-
   return (
     <Card>
       <CardContent className="flex gap-3 p-3">
@@ -51,9 +44,12 @@ export function ServiceItem({
                 currency: 'BRL',
               }).format(Number(service.price))}
             </span>
-            <Button variant="secondary" onClick={handleBookingClick}>
-              Reservar
-            </Button>
+
+            <SheetBooking
+              isAuthenticated={isAuthenticated}
+              barbershop={barbershop}
+              service={service}
+            />
           </div>
         </div>
       </CardContent>
