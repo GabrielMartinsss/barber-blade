@@ -15,19 +15,31 @@ import { ptBR } from 'date-fns/locale'
 
 import { generateDayTimeList } from '@/utils/generate-day-time-list'
 import { useMemo, useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { Card, CardContent } from '@/components/ui/card'
 
 import { ServiceItemProps } from './service-item'
-import { format } from 'date-fns'
+import { format, setHours, setMinutes } from 'date-fns'
+import { saveBooking } from '../actions/save-booking'
+import { Loader2 } from 'lucide-react'
+
+interface DataUser {
+  id: string
+  name: string
+  email: string
+  image: string
+}
 
 export function SheetBooking({
   barbershop,
   service,
   isAuthenticated,
 }: ServiceItemProps) {
+  const { data } = useSession()
+
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [hour, setHour] = useState<string | undefined>()
+  const [isSubmitLoding, setIsSubmitLoding] = useState(false)
 
   function handleSelectDateClick(date: Date | undefined) {
     setDate(date)
@@ -41,6 +53,28 @@ export function SheetBooking({
   async function handleBookingClick() {
     if (!isAuthenticated) {
       return signIn('google')
+    }
+  }
+
+  async function handleBookingSubmit() {
+    try {
+      setIsSubmitLoding(true)
+      if (!hour || !date || !data?.user) return
+
+      const dateHour = Number(hour.split(':')[0])
+      const dateMinutes = Number(hour.split(':')[1])
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes)
+
+      await saveBooking({
+        serviceId: service.id,
+        barbershopId: barbershop.id,
+        userId: (data.user as DataUser).id,
+        date: newDate,
+      })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsSubmitLoding(false)
     }
   }
 
@@ -136,7 +170,14 @@ export function SheetBooking({
         </Card>
 
         <SheetFooter className="absolute bottom-6 w-full px-5">
-          <Button disabled={!date || !hour}>Confirmar</Button>
+          <Button
+            disabled={!date || !hour || isSubmitLoding}
+            onClick={handleBookingSubmit}
+            className="dark:text-zinc-50"
+          >
+            {isSubmitLoding && <Loader2 className="mr-2 size-4 animate-spin" />}
+            Confirmar
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
