@@ -21,7 +21,19 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ServiceItemProps } from './service-item'
 import { format, setHours, setMinutes } from 'date-fns'
 import { saveBooking } from '../actions/save-booking'
-import { Loader2 } from 'lucide-react'
+import { CheckCircle2, Loader2 } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { useRouter } from 'next/navigation'
 
 interface DataUser {
   id: string
@@ -36,10 +48,13 @@ export function SheetBooking({
   isAuthenticated,
 }: ServiceItemProps) {
   const { data } = useSession()
+  const router = useRouter()
 
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [hour, setHour] = useState<string | undefined>()
   const [isSubmitLoding, setIsSubmitLoding] = useState(false)
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const [isMadeBooking, setIsMadeBooking] = useState(false)
 
   function handleSelectDateClick(date: Date | undefined) {
     setDate(date)
@@ -71,6 +86,10 @@ export function SheetBooking({
         userId: (data.user as DataUser).id,
         date: newDate,
       })
+
+      setIsMadeBooking(true)
+      setHour(undefined)
+      setDate(undefined)
     } catch (error) {
       console.log(error)
     } finally {
@@ -84,7 +103,7 @@ export function SheetBooking({
   )
 
   return (
-    <Sheet>
+    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
         <Button variant="secondary" onClick={handleBookingClick}>
           Reservar
@@ -170,14 +189,58 @@ export function SheetBooking({
         </Card>
 
         <SheetFooter className="absolute bottom-6 w-full px-5">
-          <Button
-            disabled={!date || !hour || isSubmitLoding}
-            onClick={handleBookingSubmit}
-            className="dark:text-zinc-50"
-          >
-            {isSubmitLoding && <Loader2 className="mr-2 size-4 animate-spin" />}
-            Confirmar
-          </Button>
+          <AlertDialog open={isMadeBooking}>
+            <AlertDialogTrigger asChild>
+              <Button
+                disabled={!date || !hour || isSubmitLoding}
+                onClick={handleBookingSubmit}
+                className="dark:text-zinc-50"
+              >
+                {isSubmitLoding && (
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                )}
+                Confirmar
+              </Button>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent className="max-w-60">
+              <AlertDialogHeader className="dark:text-zinc-50">
+                <AlertDialogTitle className="flex flex-col items-center">
+                  <CheckCircle2
+                    fill="#F57605"
+                    size={72}
+                    className="dark:text-zinc-900"
+                  />
+                  Reserva realizada!
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Sua reserva foi agendada com sucesso.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter>
+                <div className="flex flex-col items-center gap-3">
+                  <AlertDialogCancel
+                    onClick={() => {
+                      setIsMadeBooking(false)
+                      setIsSheetOpen(false)
+                    }}
+                    className="w-full dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+                  >
+                    OK
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      router.push('/bookings')
+                    }}
+                    className="w-full dark:text-zinc-50"
+                  >
+                    Ver reserva
+                  </AlertDialogAction>
+                </div>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </SheetFooter>
       </SheetContent>
     </Sheet>
