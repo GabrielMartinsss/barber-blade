@@ -156,7 +156,6 @@ export function SheetBooking({
 
         <Separator />
 
-        {/* TODO: only show scheduling hours if user selected a date */}
         {date && (
           <ScrollArea className="w-full">
             <div className="flex w-max gap-2 px-5 py-6">
@@ -260,6 +259,7 @@ export function SheetBooking({
                   <AlertDialogAction
                     onClick={() => {
                       router.push('/bookings')
+                      router.refresh()
                     }}
                     className="w-full dark:text-zinc-50"
                   >
