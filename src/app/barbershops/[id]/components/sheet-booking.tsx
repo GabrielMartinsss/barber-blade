@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { ptBR } from 'date-fns/locale'
 
 import { generateDayTimeList } from '@/utils/generate-day-time-list'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -34,6 +34,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { useRouter } from 'next/navigation'
+import { Booking } from '@prisma/client'
+import { getBookingsHours } from '../actions/get-bookings-hours'
 
 interface DataUser {
   id: string
@@ -52,9 +54,21 @@ export function SheetBooking({
 
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [hour, setHour] = useState<string | undefined>()
+  const [bookingsHours, setBookingsHours] = useState<Booking[]>([])
   const [isSubmitLoding, setIsSubmitLoding] = useState(false)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [isMadeBooking, setIsMadeBooking] = useState(false)
+
+  useEffect(() => {
+    async function refreshBookingsHours() {
+      if (!date) return
+
+      const _bookingsHours = await getBookingsHours(barbershop.id, date)
+      setBookingsHours(_bookingsHours)
+    }
+
+    refreshBookingsHours()
+  }, [date, barbershop.id])
 
   function handleSelectDateClick(date: Date | undefined) {
     setDate(date)
@@ -97,10 +111,24 @@ export function SheetBooking({
     }
   }
 
-  const timeList = useMemo(
-    () => (date ? generateDayTimeList(date) : []),
-    [date],
-  )
+  const timeList = useMemo(() => {
+    if (!date) return []
+
+    return generateDayTimeList(date).filter((time) => {
+      const timeHours = Number(time.split(':')[0])
+      const timeMinutes = Number(time.split(':')[1])
+
+      const bookings = bookingsHours.find((booking) => {
+        const bookingHours = booking.date.getHours()
+        const bookingMinutes = booking.date.getMinutes()
+
+        return bookingHours === timeHours && bookingMinutes === timeMinutes
+      })
+
+      if (!bookings) return true
+      return false
+    })
+  }, [date, bookingsHours])
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
