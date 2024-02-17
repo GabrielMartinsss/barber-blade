@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { Menu } from './menu'
+import Link from 'next/link'
 
 type HeaderProps = ComponentProps<'header'>
 
@@ -13,7 +14,14 @@ export function Header({ className }: HeaderProps) {
         className,
       )}
     >
-      <Image src="/logo.png" alt="logo Barber Blade" height={34} width={151} />
+      <Link href="/">
+        <Image
+          src="/logo.png"
+          alt="logo Barber Blade"
+          height={34}
+          width={151}
+        />
+      </Link>
 
       <Menu />
     </header>
