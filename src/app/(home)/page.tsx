@@ -18,22 +18,24 @@ interface DataUser {
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
-  const barbershops = await databasePrisma.barbershop.findMany()
-  const bookings = session?.user
-    ? await databasePrisma.booking.findMany({
-        where: {
-          userId: (session.user as DataUser).id,
-          date: {
-            lte: endOfDay(new Date()),
-            gte: startOfDay(new Date()),
+  const [barbershops, bookings] = await Promise.all([
+    databasePrisma.barbershop.findMany(),
+    session?.user
+      ? await databasePrisma.booking.findMany({
+          where: {
+            userId: (session.user as DataUser).id,
+            date: {
+              lte: endOfDay(new Date()),
+              gte: startOfDay(new Date()),
+            },
           },
-        },
-        include: {
-          service: true,
-          barbershop: true,
-        },
-      })
-    : []
+          include: {
+            service: true,
+            barbershop: true,
+          },
+        })
+      : Promise.resolve([]),
+  ])
 
   const bookingsFiltered = bookings
     .filter((booking) => isFuture(booking.date))
@@ -59,7 +61,7 @@ export default async function Home() {
       {bookingsFiltered.length > 0 && (
         <div className="space-y-3 px-5">
           <p className="text-xs font-bold uppercase dark:text-zinc-500">
-            Agendamentos
+            Agendamentos de hoje
           </p>
           {bookingsFiltered.map((booking) => (
             <BookingItem key={booking.id} booking={booking} />

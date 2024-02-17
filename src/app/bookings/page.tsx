@@ -4,7 +4,6 @@ import { authOptions } from '../api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
 import { databasePrisma } from '@/lib/prisma'
 import { BookingItem } from '@/components/booking-item'
-import { isFuture, isPast } from 'date-fns'
 import { Separator } from '@/components/ui/separator'
 
 interface DataUser {
@@ -18,22 +17,28 @@ export default async function BookingsPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user) return redirect('/')
 
-  const bookings = await databasePrisma.booking.findMany({
-    where: {
-      userId: (session.user as DataUser).id,
-    },
-    include: {
-      service: true,
-      barbershop: true,
-    },
-  })
-
-  const confirmedBookings = bookings
-    .filter((booking) => isFuture(booking.date))
-    .sort((a, b) => Number(a.date) - Number(b.date))
-  const finishedBookings = bookings
-    .filter((booking) => isPast(booking.date))
-    .sort((a, b) => Number(b.date) - Number(a.date))
+  const [confirmedBookings, finishedBookings] = await Promise.all([
+    databasePrisma.booking.findMany({
+      where: {
+        userId: (session.user as DataUser).id,
+        date: { gt: new Date() },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
+    databasePrisma.booking.findMany({
+      where: {
+        userId: (session.user as DataUser).id,
+        date: { lt: new Date() },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
+  ])
 
   const isAnyBooking =
     confirmedBookings.length < 1 && finishedBookings.length < 1
@@ -52,9 +57,11 @@ export default async function BookingsPage() {
       {confirmedBookings.length > 0 && (
         <div className="space-y-3">
           <h2 className="text-xs uppercase dark:text-zinc-500">Confirmados</h2>
-          {confirmedBookings.map((booking) => (
-            <BookingItem key={booking.id} booking={booking} />
-          ))}
+          {confirmedBookings
+            .sort((a, b) => Number(a.date) - Number(b.date))
+            .map((booking) => (
+              <BookingItem key={booking.id} booking={booking} />
+            ))}
         </div>
       )}
 
@@ -63,9 +70,11 @@ export default async function BookingsPage() {
       {finishedBookings.length > 0 && (
         <div className="space-y-3">
           <h2 className="text-xs uppercase dark:text-zinc-500">Finalizados</h2>
-          {finishedBookings.map((booking) => (
-            <BookingItem key={booking.id} booking={booking} />
-          ))}
+          {finishedBookings
+            .sort((a, b) => Number(b.date) - Number(a.date))
+            .map((booking) => (
+              <BookingItem key={booking.id} booking={booking} />
+            ))}
         </div>
       )}
     </div>
