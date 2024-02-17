@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { endOfDay, format, isFuture, startOfDay } from 'date-fns'
 import { Header } from '@/components/header'
 import { ptBR } from 'date-fns/locale'
 import { InputSearch } from './components/input-search'
@@ -6,9 +6,38 @@ import { BookingItem } from '@/components/booking-item'
 import { BarbershopItem } from './components/barbershop-item'
 import { databasePrisma } from '@/lib/prisma'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]/route'
+
+interface DataUser {
+  id: string
+  name: string
+  email: string
+  image: string
+}
 
 export default async function Home() {
+  const session = await getServerSession(authOptions)
   const barbershops = await databasePrisma.barbershop.findMany()
+  const bookings = session?.user
+    ? await databasePrisma.booking.findMany({
+        where: {
+          userId: (session.user as DataUser).id,
+          date: {
+            lte: endOfDay(new Date()),
+            gte: startOfDay(new Date()),
+          },
+        },
+        include: {
+          service: true,
+          barbershop: true,
+        },
+      })
+    : []
+
+  const bookingsFiltered = bookings
+    .filter((booking) => isFuture(booking.date))
+    .sort((a, b) => Number(a.date) - Number(b.date))
 
   return (
     <div className="mb-10 space-y-6">
@@ -27,12 +56,16 @@ export default async function Home() {
 
       <InputSearch className="px-5" />
 
-      <div className="space-y-3 px-5">
-        <p className="text-xs font-bold uppercase dark:text-zinc-500">
-          Agendamentos
-        </p>
-        {/* <BookingItem /> */}
-      </div>
+      {bookingsFiltered.length > 0 && (
+        <div className="space-y-3 px-5">
+          <p className="text-xs font-bold uppercase dark:text-zinc-500">
+            Agendamentos
+          </p>
+          {bookingsFiltered.map((booking) => (
+            <BookingItem key={booking.id} booking={booking} />
+          ))}
+        </div>
+      )}
 
       <div className="space-y-3">
         <p className="px-5 text-xs font-bold uppercase dark:text-zinc-500">
