@@ -251,6 +251,7 @@ export function SheetBooking({
                     onClick={() => {
                       setIsMadeBooking(false)
                       setIsSheetOpen(false)
+                      router.refresh()
                     }}
                     className="w-full dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
                   >
