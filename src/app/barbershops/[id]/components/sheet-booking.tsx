@@ -19,7 +19,7 @@ import { signIn, useSession } from 'next-auth/react'
 import { Card, CardContent } from '@/components/ui/card'
 
 import { ServiceItemProps } from './service-item'
-import { format, setHours, setMinutes } from 'date-fns'
+import { setHours, setMinutes } from 'date-fns'
 import { saveBooking } from '../actions/save-booking'
 import { CheckCircle2, Loader2 } from 'lucide-react'
 import {
@@ -36,6 +36,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { Booking } from '@prisma/client'
 import { getBookingsHours } from '../actions/get-bookings-hours'
+import { BookingCard } from './booking-card'
 
 interface DataUser {
   id: string
@@ -179,39 +180,11 @@ export function SheetBooking({
 
         <Card className="mx-5 my-6">
           <CardContent className="space-y-3 p-3">
-            <div className="flex items-center justify-between dark:text-zinc-50">
-              <h2 className="font-bold capitalize">{service.name}</h2>
-              <span className="text-sm font-bold">
-                {Intl.NumberFormat('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL',
-                }).format(Number(service.price))}
-              </span>
-            </div>
-
-            {date && (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-500">Data</span>
-                <span className="text-sm text-zinc-50">
-                  {format(date, "dd 'de'")}{' '}
-                  <span className="capitalize">
-                    {format(date, ' MMMM', { locale: ptBR })}
-                  </span>
-                </span>
-              </div>
-            )}
-
-            {hour && (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-500">Horário</span>
-                <span className="text-sm text-zinc-50">{hour}</span>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-zinc-500">Barbearia</span>
-              <span className="text-sm text-zinc-50">{barbershop.name}</span>
-            </div>
+            <BookingCard
+              barbershop={barbershop}
+              booking={{ date, hour }}
+              service={{ name: service.name, price: Number(service.price) }}
+            />
           </CardContent>
         </Card>
 
