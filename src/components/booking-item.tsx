@@ -48,7 +48,7 @@ export function BookingItem({ booking }: BookingItemProps) {
             {format(booking.date, 'MMMM', { locale: ptBR })}
           </p>
           <p className="text-2xl">{format(booking.date, 'dd')}</p>
-          <p>{format(booking.date, 'hh:mm')}</p>
+          <p>{format(booking.date, 'HH:mm')}</p>
         </div>
       </CardContent>
     </Card>
