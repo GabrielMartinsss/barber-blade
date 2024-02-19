@@ -9,6 +9,13 @@ export function generateDayTimeList(date: Date): string[] {
   let currentTime = startTime
 
   while (currentTime <= endTime) {
+    if (
+      date.getDate() === new Date().getDate() &&
+      currentTime.getHours() <= new Date().getHours()
+    ) {
+      currentTime = addMinutes(currentTime, intervalInMinutes)
+      continue
+    }
     timeList.push(format(currentTime, 'HH:mm'))
     currentTime = addMinutes(currentTime, intervalInMinutes)
   }
