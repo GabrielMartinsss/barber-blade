@@ -36,7 +36,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { Booking } from '@prisma/client'
 import { getBookingsHours } from '../actions/get-bookings-hours'
-import { BookingCard } from './booking-card'
+import { ServiceCard } from './service-card'
 
 interface DataUser {
   id: string
@@ -180,7 +180,7 @@ export function SheetBooking({
 
         <Card className="mx-5 my-6">
           <CardContent className="space-y-3 p-3">
-            <BookingCard
+            <ServiceCard
               barbershop={barbershop}
               booking={{ date, hour }}
               service={{ name: service.name, price: Number(service.price) }}
