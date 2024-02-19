@@ -47,7 +47,13 @@ export default async function Home() {
 
       <div className="px-5">
         <h2 className="text-xl dark:text-zinc-50">
-          Olá, <span className="font-bold"> Faça seu login!</span>
+          Olá,{' '}
+          <span className="font-bold">
+            {session?.user
+              ? session.user.name?.split(' ')[0]
+              : 'faça seu login'}
+            !
+          </span>
         </h2>
         <span className="text-sm capitalize dark:text-zinc-300">
           {format(new Date(), "EEEE',' dd 'de' MMMM", {
