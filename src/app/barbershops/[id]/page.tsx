@@ -6,6 +6,7 @@ import { MapPin, Star } from 'lucide-react'
 import { ServiceItem } from './components/service-item'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { redirect } from 'next/navigation'
 
 export interface BarbershopDetailPageProps {
   params: {
@@ -19,10 +20,7 @@ export default async function BarbershopDetailPage({
   const session = await getServerSession(authOptions)
   const isAuthenticated = !!session?.user
 
-  if (!id) {
-    // TODO: this should redirect to home page
-    return null
-  }
+  if (!id) return redirect('/')
 
   const barbershop = await databasePrisma.barbershop.findUnique({
     where: { id },
@@ -31,10 +29,7 @@ export default async function BarbershopDetailPage({
     },
   })
 
-  if (!barbershop) {
-    // TODO: this should redirect to home page
-    return null
-  }
+  if (!barbershop) return redirect('/')
 
   return (
     <main className="mb-10 flex flex-col gap-6">
