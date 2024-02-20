@@ -62,7 +62,9 @@ export default async function Home() {
         </span>
       </div>
 
-      <InputSearch className="px-5" />
+      <div className="px-5">
+        <InputSearch />
+      </div>
 
       {bookingsFiltered.length > 0 && (
         <div className="space-y-3 px-5">
