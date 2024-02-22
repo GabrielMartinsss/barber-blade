@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from './providers/auth'
+import { Toaster } from '@/components/ui/toaster'
 
 const nunito = Nunito({ subsets: ['latin'] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${nunito.className} dark:bg-zinc-950`}>
         <AuthProvider>{children}</AuthProvider>
+        <Toaster />
       </body>
     </html>
   )

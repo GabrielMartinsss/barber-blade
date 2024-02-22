@@ -21,6 +21,7 @@ import { Button } from '../ui/button'
 import { useState } from 'react'
 import { CancelBookingAlertDialog } from './cancel-booking-alert-dialog'
 import { BookingCard } from './booking-card'
+import { BarbershopPhone } from '../barbershop-phone'
 
 export interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -100,6 +101,9 @@ export function BookingItem({ booking }: BookingItemProps) {
                 />
               </CardContent>
             </Card>
+            <div className="py-3">
+              <BarbershopPhone phone={booking.barbershop.telephone} />
+            </div>
           </div>
         </div>
 

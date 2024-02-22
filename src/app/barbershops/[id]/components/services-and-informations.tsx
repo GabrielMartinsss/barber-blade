@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client'
 import { ServiceItem } from './service-item'
 import { useState } from 'react'
 import { Separator } from '@/components/ui/separator'
-import { Smartphone } from 'lucide-react'
+import { BarbershopPhone } from '@/components/barbershop-phone'
 
 interface ServicesAndInformationsProps {
   isAuthenticated: boolean
@@ -76,15 +76,7 @@ export function ServicesAndInformations({
 
           <Separator />
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Smartphone className="size-6 dark:text-zinc-50" />
-              <span className="text-sm dark:text-zinc-50">
-                {barbershop.telephone}
-              </span>
-            </div>
-            <Button variant="secondary"> Copiar</Button>
-          </div>
+          <BarbershopPhone phone={barbershop.telephone} />
 
           <Separator />
 
