@@ -1,12 +1,11 @@
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { databasePrisma } from '@/lib/prisma'
 import { Header } from './components/header'
 import { MapPin, Star } from 'lucide-react'
-import { ServiceItem } from './components/service-item'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
+import { ServicesAndInformations } from './components/services-and-informations'
 
 export interface BarbershopDetailPageProps {
   params: {
@@ -14,7 +13,7 @@ export interface BarbershopDetailPageProps {
   }
 }
 
-export default async function BarbershopDetailPage({
+export default async function BarbershopDetailsPage({
   params: { id },
 }: BarbershopDetailPageProps) {
   const session = await getServerSession(authOptions)
@@ -56,25 +55,10 @@ export default async function BarbershopDetailPage({
 
       <Separator />
 
-      <section className="space-y-6 px-5">
-        <div className="flex gap-2">
-          <Button className="dark:text-zinc-50">Serviços</Button>
-          <Button variant="outline" className="dark:text-zinc-50">
-            Informações
-          </Button>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {barbershop.services.map((service) => (
-            <ServiceItem
-              key={service.id}
-              barbershop={barbershop}
-              service={service}
-              isAuthenticated={isAuthenticated}
-            />
-          ))}
-        </div>
-      </section>
+      <ServicesAndInformations
+        isAuthenticated={isAuthenticated}
+        barbershop={barbershop}
+      />
     </main>
   )
 }
