@@ -60,6 +60,11 @@ export function SheetBooking({
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [isMadeBooking, setIsMadeBooking] = useState(false)
 
+  const isSunday = (date: Date) => {
+    const day = date.getDay()
+    return day === 0
+  }
+
   useEffect(() => {
     async function refreshBookingsHours() {
       if (!date) return
@@ -152,6 +157,7 @@ export function SheetBooking({
           onSelect={handleSelectDateClick}
           className="px-5 py-6 capitalize"
           fromDate={new Date()}
+          disabled={isSunday}
           locale={ptBR}
         />
 
