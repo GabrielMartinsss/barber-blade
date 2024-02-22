@@ -24,13 +24,15 @@ model User {
 }
 
 model Barbershop {
-  id       String    @id @default(uuid())
-  name     String
-  address  String
-  imageUrl String
-  services Service[]
-  bookings Booking[]
-  rating   Rating[]
+  id          String    @id @default(uuid())
+  name        String
+  address     String
+  imageUrl    String
+  description String?
+  telephone   String
+  services    Service[]
+  bookings    Booking[]
+  rating      Rating[]
 
   @@map("barbershop")
 }

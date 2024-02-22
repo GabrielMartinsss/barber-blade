@@ -30,7 +30,19 @@ async function seedDatabase() {
       'Estilo Urbano',
       'Estilo Clássico',
     ]
-
+    // Telefones para as barbearias
+    const telephones = [
+      '(11) 98204-5108',
+      '(12) 99503-2351',
+      '(13) 97543-2221',
+      '(44) 95511-8755',
+      '(18) 93132-6753',
+      '(11) 99503-2351',
+      '(12) 94902-6094',
+      '(12) 98788-4122',
+      '(44) 96239-1283',
+      '(11) 98422-1111',
+    ]
     // Endereços fictícios para as barbearias
     const addresses = [
       'Rua da Barbearia, 123',
@@ -43,6 +55,19 @@ async function seedDatabase() {
       'Praça da Aparência, 505',
       'Rua Urbana, 606',
       'Avenida Clássica, 707',
+    ]
+    // Descrição para as barbearias
+    const descriptions = [
+      'Bem-vindo à Vintage Barber, onde tradição encontra estilo. Nossa equipe de mestres barbeiros transforma cortes de cabelo e barbas em obras de arte. Em um ambiente acolhedor, promovemos confiança, estilo e uma comunidade unida.',
+      'Entre no mundo de estilo da Corte & Estilo, onde cada corte de cabelo e barba é uma expressão única de sua personalidade. Aqui, nós elevamos a arte da barbearia para um novo patamar, oferecendo serviços impecáveis em um ambiente acolhedor e descontraído.',
+      'Prepare-se para uma experiência excepcional na Barba & Navalha, onde a tradição se encontra com a inovação. Nossos habilidosos barbeiros combinam técnicas clássicas com um toque moderno para criar looks que exalam confiança e estilo.',
+      'Bem-vindo ao The Dapper Den, o refúgio definitivo para o cavalheiro moderno. Aqui, cada corte e barba é realizado com precisão meticulosa, resultando em uma aparência impecável que reflete sua sofisticação e bom gosto.',
+      'Em Cabelo & Cia., cada visita é uma jornada de transformação. Nossa equipe de profissionais talentosos está aqui para ajudá-lo a alcançar o visual dos seus sonhos, oferecendo cortes e barbas que refletem sua personalidade única em um ambiente descontraído e acolhedor.',
+      'No Machado & Tesoura, a excelência é a nossa marca registrada. Nossa equipe de barbeiros experientes está aqui para fornecer a você serviços de primeira classe, garantindo que cada corte e barba seja executado com maestria para um resultado verdadeiramente impressionante.',
+      'Descubra um novo padrão de excelência na Barbearia Elegance, onde cada detalhe é cuidadosamente elaborado para satisfazer seus desejos de estilo. Nossa equipe talentosa está comprometida em fornecer serviços de qualidade superior em um ambiente luxuoso e acolhedor.',
+      'Na Aparência Impecável, a arte da barbearia é levada a sério. Nossa equipe de mestres barbeiros está aqui para oferecer a você uma experiência única, onde cada corte e barba é executado com precisão cirúrgica para garantir uma aparência impecável em todos os momentos.',
+      'Entre no mundo do Estilo Urbano, onde a criatividade e a autenticidade se encontram. Nossa equipe de especialistas em cortes e barbas está aqui para ajudá-lo a expressar sua individualidade, oferecendo serviços personalizados em um ambiente moderno e vibrante.',
+      'Descubra a elegância intemporal na Barbearia Estilo Clássico, onde o charme do passado se une ao estilo contemporâneo. Nossos experientes barbeiros estão dedicados a fornecer serviços excepcionais que deixam você com uma aparência e sensação de confiança incomparáveis.',
     ]
 
     const services = [
@@ -89,12 +114,16 @@ async function seedDatabase() {
       const name = creativeNames[i]
       const address = addresses[i]
       const imageUrl = images[i]
+      const telephone = telephones[i]
+      const description = descriptions[i]
 
       const barbershop = await prisma.barbershop.create({
         data: {
           name,
           address,
           imageUrl,
+          description,
+          telephone,
         },
       })
 
