@@ -32,7 +32,7 @@ model Barbershop {
   telephone   String
   services    Service[]
   bookings    Booking[]
-  rating      Rating[]
+  ratings     Rating[]
 
   @@map("barbershop")
 }
@@ -65,7 +65,7 @@ model Booking {
 
 model Rating {
   id           String     @id @default(uuid())
-  value        Decimal    @db.Decimal(1, 1)
+  value        Int        @default(1)
   barbershopId String
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
 
