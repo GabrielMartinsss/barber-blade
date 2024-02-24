@@ -22,6 +22,7 @@ import { useState } from 'react'
 import { CancelBookingAlertDialog } from './cancel-booking-alert-dialog'
 import { BookingCard } from './booking-card'
 import { BarbershopPhone } from '../barbershop-phone'
+import { RatingBarbershop } from './rating-barbershop'
 
 export interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -109,13 +110,15 @@ export function BookingItem({ booking }: BookingItemProps) {
 
         <SheetFooter className="absolute bottom-6 flex w-full flex-row gap-3 px-5">
           <SheetClose asChild>
-            <Button variant="secondary" className="flex-1">
+            <Button variant="secondary" className="w-full">
               Voltar
             </Button>
           </SheetClose>
 
-          {isFuture(booking.date) && (
+          {isFuture(booking.date) ? (
             <CancelBookingAlertDialog booking={booking} />
+          ) : (
+            <RatingBarbershop barbershop={booking.barbershop} />
           )}
         </SheetFooter>
       </SheetContent>
