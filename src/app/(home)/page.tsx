@@ -19,7 +19,9 @@ interface DataUser {
 export default async function Home() {
   const session = await getServerSession(authOptions)
   const [barbershops, bookings] = await Promise.all([
-    databasePrisma.barbershop.findMany(),
+    databasePrisma.barbershop.findMany({
+      include: { ratings: true },
+    }),
     session?.user
       ? await databasePrisma.booking.findMany({
           where: {
@@ -40,6 +42,13 @@ export default async function Home() {
   const bookingsFiltered = bookings
     .filter((booking) => isFuture(booking.date))
     .sort((a, b) => Number(a.date) - Number(b.date))
+
+  const recommendedBarbershops = barbershops.filter(
+    (item) =>
+      item.ratings.reduce((acc, curret) => acc + curret.value, 0) /
+        item.ratings.length >=
+      4,
+  )
 
   return (
     <div className="mb-10 space-y-6">
@@ -84,7 +93,7 @@ export default async function Home() {
 
         <ScrollArea className="w-full pl-5">
           <div className="flex w-max gap-4 pb-4">
-            {barbershops.map((barbershop) => (
+            {recommendedBarbershops.map((barbershop) => (
               <BarbershopItem key={barbershop.id} barbershop={barbershop} />
             ))}
           </div>

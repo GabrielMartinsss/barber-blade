@@ -3,13 +3,15 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Barbershop } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { Star } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 interface BarbershopItemProps {
-  barbershop: Barbershop
+  barbershop: Prisma.BarbershopGetPayload<{
+    include: { ratings: true }
+  }>
 }
 
 export function BarbershopItem({ barbershop }: BarbershopItemProps) {
@@ -18,6 +20,13 @@ export function BarbershopItem({ barbershop }: BarbershopItemProps) {
   function handleBookingClick() {
     router.push(`/barbershops/${barbershop.id}`)
   }
+
+  const barbershopRating =
+    barbershop.ratings.length > 0
+      ? barbershop.ratings.reduce((state, rating) => {
+          return state + rating.value
+        }, 0) / barbershop.ratings.length
+      : 1
 
   return (
     <Card className="w-full overflow-hidden rounded-b-2xl rounded-t-3xl last:mr-5">
@@ -28,7 +37,9 @@ export function BarbershopItem({ barbershop }: BarbershopItemProps) {
             className="absolute left-1 top-1 z-50 flex items-center gap-1 dark:border-transparent dark:bg-opacity-75"
           >
             <Star className="size-3 fill-primary-500 text-primary-500" />
-            <span className="dark:text-zinc-50">5,0</span>
+            <span className="dark:text-zinc-50">
+              {barbershopRating.toFixed(1)}
+            </span>
           </Badge>
           <Image
             src={barbershop.imageUrl}

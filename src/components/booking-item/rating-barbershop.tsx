@@ -18,6 +18,7 @@ import { createRating } from '@/app/actions/create-rating'
 import { useToast } from '../ui/use-toast'
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export interface RatingBarbershopProps {
   barbershop: Barbershop
@@ -29,6 +30,7 @@ const ratingFormSchema = z.object({
 type RatingFormInput = z.infer<typeof ratingFormSchema>
 
 export function RatingBarbershop({ barbershop }: RatingBarbershopProps) {
+  const router = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitLoding, setIsSubmitLoding] = useState(false)
 
@@ -52,6 +54,8 @@ export function RatingBarbershop({ barbershop }: RatingBarbershopProps) {
         title: 'Avaliação feita com sucesso!',
         variant: 'success',
       })
+
+      router.refresh()
     } catch (err) {
       console.error(err)
       setIsDialogOpen(false)

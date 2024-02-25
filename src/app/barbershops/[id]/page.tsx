@@ -25,10 +25,18 @@ export default async function BarbershopDetailsPage({
     where: { id },
     include: {
       services: true,
+      ratings: true,
     },
   })
 
   if (!barbershop) return redirect('/')
+
+  const barbershopRating =
+    barbershop.ratings.length > 0
+      ? barbershop.ratings.reduce((state, rating) => {
+          return state + rating.value
+        }, 0) / barbershop.ratings.length
+      : 1
 
   return (
     <main className="mb-10 flex flex-col gap-6">
@@ -48,7 +56,8 @@ export default async function BarbershopDetailsPage({
         <div className="flex items-center gap-2">
           <Star size={14} className="text-primary-500" />
           <span className="text-sm dark:text-zinc-300">
-            5,0 (889 avaliações)
+            {barbershopRating.toFixed(1)} &#40;{barbershop.ratings.length}{' '}
+            {barbershop.ratings.length > 1 ? 'avaliações' : 'avaliação'}&#41;
           </span>
         </div>
       </section>
