@@ -17,7 +17,7 @@ async function seedDatabase() {
       'https://images.unsplash.com/photo-1589985523654-936539ff49c0?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       'https://images.unsplash.com/photo-1634481428939-3b66e6ad4ffb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ]
-    // Nomes criativos para as barbearias
+
     const creativeNames = [
       'Barbearia Vintage',
       'Corte & Estilo',
@@ -30,7 +30,7 @@ async function seedDatabase() {
       'Estilo Urbano',
       'Estilo Clássico',
     ]
-    // Telefones para as barbearias
+
     const telephones = [
       '(11) 98204-5108',
       '(12) 99503-2351',
@@ -43,7 +43,7 @@ async function seedDatabase() {
       '(44) 96239-1283',
       '(11) 98422-1111',
     ]
-    // Endereços fictícios para as barbearias
+
     const addresses = [
       'Rua da Barbearia, 123',
       'Avenida dos Cortes, 456',
@@ -56,7 +56,7 @@ async function seedDatabase() {
       'Rua Urbana, 606',
       'Avenida Clássica, 707',
     ]
-    // Descrição para as barbearias
+
     const descriptions = [
       'Bem-vindo à Vintage Barber, onde tradição encontra estilo. Nossa equipe de mestres barbeiros transforma cortes de cabelo e barbas em obras de arte. Em um ambiente acolhedor, promovemos confiança, estilo e uma comunidade unida.',
       'Entre no mundo de estilo da Corte & Estilo, onde cada corte de cabelo e barba é uma expressão única de sua personalidade. Aqui, nós elevamos a arte da barbearia para um novo patamar, oferecendo serviços impecáveis em um ambiente acolhedor e descontraído.',
@@ -108,7 +108,9 @@ async function seedDatabase() {
       },
     ]
 
-    // Criar 10 barbearias com nomes e endereços fictícios
+    const ratings = [5, 4, 2, 3, 5, 4, 5, 4, 3, 4]
+
+    // create 10 barbershops
     const barbershops = []
     for (let i = 0; i < 10; i++) {
       const name = creativeNames[i]
@@ -142,6 +144,14 @@ async function seedDatabase() {
           },
         })
       }
+
+      // add rating in barbershop
+      await prisma.rating.create({
+        data: {
+          value: ratings[i],
+          barbershopId: barbershop.id,
+        },
+      })
 
       barbershops.push(barbershop)
     }
