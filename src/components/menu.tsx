@@ -35,7 +35,11 @@ export function Menu() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="absolute right-5 z-30">
+        <Button
+          variant="outline"
+          size="icon"
+          className="absolute right-5 z-30 lg:hidden"
+        >
           <MenuIcon className="dark:text-zinc-50" />
         </Button>
       </SheetTrigger>
