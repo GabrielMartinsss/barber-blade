@@ -47,6 +47,9 @@ const config = {
           '950': '#311801',
         },
       },
+      gridTemplateColumns: {
+        home: '439px 1fr',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
