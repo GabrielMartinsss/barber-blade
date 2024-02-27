@@ -15,10 +15,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import { tv, VariantProps } from 'tailwind-variants'
+import { InputSearch } from './input-search'
 
-type HeaderProps = ComponentProps<'header'>
+const header = tv({
+  base: 'hidden',
+  variants: {
+    variant: {
+      default: '',
+      withSearch: 'lg:block flex-1 mx-11',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+})
 
-export function Header({ className }: HeaderProps) {
+type HeaderProps = ComponentProps<'header'> & VariantProps<typeof header>
+
+export function Header({ className, variant }: HeaderProps) {
   const { data, status } = useSession()
 
   async function handleLogoutClick() {
@@ -41,6 +56,10 @@ export function Header({ className }: HeaderProps) {
             width={151}
           />
         </Link>
+
+        <div className={header({ variant })}>
+          <InputSearch />
+        </div>
 
         <div className="hidden items-center gap-6 lg:flex">
           {status === 'authenticated' && (
