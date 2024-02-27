@@ -1,3 +1,5 @@
+'use client'
+
 import { Smartphone } from 'lucide-react'
 import { Button } from './ui/button'
 import { useToast } from './ui/use-toast'
