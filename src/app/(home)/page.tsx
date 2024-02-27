@@ -54,7 +54,7 @@ export default async function Home() {
 
   return (
     <div className="mb-10 space-y-6 lg:mx-auto">
-      <Header className="px-5 lg:px-0" />
+      <Header className="pl-5" />
 
       <div className="relative lg:bg-opacity-5 lg:py-16">
         <Image

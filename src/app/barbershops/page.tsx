@@ -27,20 +27,20 @@ export default async function BarbershopPage({
     },
   })
   return (
-    <>
-      <Header className="px-5" />
+    <div>
+      <Header className="pl-5" />
 
-      <div className="px-5 py-6">
+      <div className="px-6 py-6 lg:mx-auto lg:px-24 2xl:max-w-[1440px] 2xl:px-32">
         <InputSearch defaultValues={{ search }} />
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase dark:text-zinc-500">
           Resultado para &quot;{search}&quot;
         </h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {barbershops.map((barbershop) => (
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
           ))}
         </div>
       </div>
-    </>
+    </div>
   )
 }
