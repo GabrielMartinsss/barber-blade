@@ -57,16 +57,16 @@ export function CancelBookingAlertDialog({
 
       <AlertDialogContent className="w-[318px]">
         <AlertDialogHeader>
-          <AlertDialogTitle className="dark:text-zinc-50">
+          <AlertDialogTitle className="text-center dark:text-zinc-50">
             Cancelar reserva
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="text-center">
             Tem certeza que deseja cancelar esse agendamento?
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <div className="flex items-center gap-3">
+          <div className="flex w-full items-center gap-3">
             <Button asChild variant="secondary">
               <AlertDialogCancel
                 onClick={() => {

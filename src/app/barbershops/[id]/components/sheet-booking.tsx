@@ -200,7 +200,7 @@ export function SheetBooking({
               <Button
                 disabled={!date || !hour || isSubmitLoding}
                 onClick={handleBookingSubmit}
-                className="dark:text-zinc-50"
+                className="w-full dark:text-zinc-50"
               >
                 {isSubmitLoding && (
                   <Loader2 className="mr-2 size-4 animate-spin" />
@@ -219,13 +219,13 @@ export function SheetBooking({
                   />
                   Reserva realizada!
                 </AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogDescription className="text-center">
                   Sua reserva foi agendada com sucesso.
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
               <AlertDialogFooter>
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex w-full flex-col items-center gap-3">
                   <AlertDialogCancel
                     onClick={() => {
                       setIsMadeBooking(false)

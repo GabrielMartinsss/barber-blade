@@ -43,40 +43,51 @@ export default async function BookingsPage() {
   const isAnyBooking =
     confirmedBookings.length < 1 && finishedBookings.length < 1
   return (
-    <div className="mb-10 space-y-6 px-5">
-      <Header />
+    <>
+      <Header variant="withSearch" />
 
-      <h1 className="text-xl font-bold dark:text-zinc-50">Agendamentos</h1>
+      <div className="my-10 space-y-6 px-5 lg:mx-auto lg:px-20 2xl:max-w-[1440px] 2xl:px-32">
+        <h1 className="text-xl font-bold dark:text-zinc-50">Agendamentos</h1>
 
-      {isAnyBooking && (
-        <span className="mt-3 block text-sm dark:text-zinc-400">
-          Você não possui agendamento!
-        </span>
-      )}
+        {isAnyBooking && (
+          <span className="mt-3 block text-sm dark:text-zinc-400">
+            Você não possui agendamento!
+          </span>
+        )}
 
-      {confirmedBookings.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="text-xs uppercase dark:text-zinc-500">Confirmados</h2>
-          {confirmedBookings
-            .sort((a, b) => Number(a.date) - Number(b.date))
-            .map((booking) => (
-              <BookingItem key={booking.id} booking={booking} />
-            ))}
-        </div>
-      )}
+        {confirmedBookings.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="text-xs uppercase dark:text-zinc-500">
+              Confirmados
+            </h2>
+            <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0 xl:grid-cols-3">
+              {confirmedBookings
+                .sort((a, b) => Number(a.date) - Number(b.date))
+                .map((booking) => (
+                  <BookingItem key={booking.id} booking={booking} />
+                ))}
+            </div>
+          </div>
+        )}
 
-      <Separator className={isAnyBooking ? 'hidden' : ''} />
+        <Separator className={isAnyBooking ? 'hidden' : ''} />
 
-      {finishedBookings.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="text-xs uppercase dark:text-zinc-500">Finalizados</h2>
-          {finishedBookings
-            .sort((a, b) => Number(b.date) - Number(a.date))
-            .map((booking) => (
-              <BookingItem key={booking.id} booking={booking} />
-            ))}
-        </div>
-      )}
-    </div>
+        {finishedBookings.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="text-xs uppercase dark:text-zinc-500">
+              Finalizados
+            </h2>
+
+            <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0 xl:grid-cols-3">
+              {finishedBookings
+                .sort((a, b) => Number(b.date) - Number(a.date))
+                .map((booking) => (
+                  <BookingItem key={booking.id} booking={booking} />
+                ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   )
 }
