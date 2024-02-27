@@ -7,11 +7,13 @@ import { ChevronLeft } from 'lucide-react'
 import { Barbershop } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 
-interface HeaderProps {
+interface HeaderBarbershopPageProps {
   barbershop: Barbershop
 }
 
-export function Header({ barbershop }: HeaderProps) {
+export function HeaderBarbershopPage({
+  barbershop,
+}: HeaderBarbershopPageProps) {
   const router = useRouter()
 
   function handleBackClick() {
@@ -19,7 +21,7 @@ export function Header({ barbershop }: HeaderProps) {
   }
 
   return (
-    <div className="relative h-[15.625rem] w-full py-6">
+    <div className="relative h-[15.625rem] w-full py-6 lg:hidden">
       <Button
         variant="outline"
         size="icon"

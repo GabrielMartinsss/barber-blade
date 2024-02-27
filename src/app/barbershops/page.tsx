@@ -22,6 +22,9 @@ export default async function BarbershopPage({
         mode: 'insensitive',
       },
     },
+    include: {
+      ratings: true,
+    },
   })
   return (
     <>

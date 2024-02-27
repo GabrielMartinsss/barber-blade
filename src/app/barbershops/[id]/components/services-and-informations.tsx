@@ -6,6 +6,7 @@ import { ServiceItem } from './service-item'
 import { useState } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { BarbershopPhone } from '@/components/barbershop-phone'
+import { HoursList } from './hours-list'
 
 interface ServicesAndInformationsProps {
   isAuthenticated: boolean
@@ -16,15 +17,6 @@ interface ServicesAndInformationsProps {
   }>
 }
 
-const weekDays = [
-  'Segunda-Feira',
-  'Terça-Feira',
-  'Quarta-Feira',
-  'Quinta-Feira',
-  'Sexta-Feira',
-  'Sabado',
-]
-
 export function ServicesAndInformations({
   isAuthenticated,
   barbershop,
@@ -34,8 +26,8 @@ export function ServicesAndInformations({
   >('services')
 
   return (
-    <section className="space-y-6 px-5">
-      <div className="flex gap-2">
+    <section className="space-y-6 px-5 lg:px-0">
+      <div className="flex gap-2 lg:hidden">
         <Button
           onClick={() => setButtonSelected('services')}
           variant={buttonSelected === 'services' ? 'default' : 'secondary'}
@@ -53,7 +45,7 @@ export function ServicesAndInformations({
       </div>
 
       {buttonSelected === 'services' ? (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-1 xl:grid-cols-2">
           {barbershop.services.map((service) => (
             <ServiceItem
               key={service.id}
@@ -80,18 +72,7 @@ export function ServicesAndInformations({
 
           <Separator />
 
-          <div className="space-y-2.5 text-sm capitalize dark:text-zinc-50">
-            <div className="flex items-center justify-between">
-              <span className="dark:text-zinc-500">Domingo</span>
-              <span>Fechado</span>
-            </div>
-            {weekDays.map((day) => (
-              <div key={day} className="flex items-center justify-between">
-                <span className="dark:text-zinc-500">{day}</span>
-                <span>09:00 - 21:00</span>
-              </div>
-            ))}
-          </div>
+          <HoursList />
         </div>
       )}
     </section>
